@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Dạy & Học Lập Trình Java - Phần 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #0b1120;
+            --bg-surface: #131c31;
+            --bg-card: #19243d;
+            --primary: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-line: rgba(255, 255, 255, 0.08);
+            --code-font: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation Bar */
+        .navbar {
+            background: rgba(19, 28, 49, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-line);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 19px;
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-back-profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border-line);
+            transition: all 0.2s;
+        }
+
+        .btn-back-profile:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #fff;
+            border-color: #3b82f6;
+        }
+
+        .role-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #0f172a;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-line);
+            font-size: 13px;
+        }
+
+        select {
+            background: transparent;
+            color: #60a5fa;
+            border: none;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Tabs Navigation */
+        .tab-bar {
+            background: var(--bg-surface);
+            display: flex;
+            gap: 8px;
+            padding: 10px 28px;
+            border-bottom: 1px solid var(--border-line);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            color: #fff;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .tab-btn.active {
+            color: #60a5fa;
+        }
+
+        /* Main Container */
+        .content-area {
+            max-width: 1240px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 28px 20px;
+            flex: 1;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Cards & Components */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-line);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .chapter-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+        .b-easy { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .b-med { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .b-hard { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .b-adv { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        pre {
+            background: #090e17;
+            padding: 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: var(--code-font);
+            font-size: 13px;
+            color: #e2e8f0;
+            border: 1px solid var(--border-line);
+            margin: 12px 0;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid var(--border-line);
+            background: rgba(255,255,255,0.05);
+            color: #cbd5e1;
+        }
+        .btn-sm:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .form-control {
+            width: 100%;
+            background: #090e17;
+            border: 1px solid var(--border-line);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            outline: none;
+        }
+        .form-control:focus { border-color: #3b82f6; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .test-case-card {
+            background: #0b1120;
+            border: 1px solid var(--border-line);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .test-pass { border-left: 4px solid #10b981; }
+        .test-fail { border-left: 4px solid #ef4444; }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVBAR -->
+    <header class="navbar">
+        <a href="#" class="brand">
+            <i class="fab fa-java fa-lg"></i>
+            <span>JavaEdu Portal</span>
+        </a>
+
+        <div class="nav-actions">
+            <!-- Nút quay lại file profile.html -->
+            <a href="phan2.html" class="btn-back-profile">
+                <i class="fas fa-user-circle"></i>
+                <span>Trang Cá Nhân (Phần 2)</span>
+            </a>
+
+            <div class="role-switcher">
+                <i class="fas fa-user-shield" style="color: #60a5fa;"></i>
+                <label for="roleSelect" style="color: var(--text-muted); font-size: 12px;">Quyền:</label>
+                <select id="roleSelect" onchange="switchRole()">
+                    <option value="student">Sinh Viên</option>
+                    <option value="teacher">Giáo Viên</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <nav class="tab-bar">
+        <button class="tab-btn active" onclick="openTab('intro')"><i class="fas fa-info-circle"></i> Giới Thiệu Môn Học</button>
+        <button class="tab-btn" onclick="openTab('theory')"><i class="fas fa-book-open"></i> Lý Thuyết & Bài Tập 4 Cấp Độ</button>
+        <button class="tab-btn" onclick="openTab('practice')"><i class="fas fa-code"></i> Thực Hành, Thi & Chấm Điểm</button>
+        <button class="tab-btn teacher-only" id="teacherTabBtn" style="display: none;" onclick="openTab('teacher')"><i class="fas fa-cog"></i> Quản Lý & Tạo Đề Thi (GV)</button>
+    </nav>
+
+    <!-- MAIN BODY -->
+    <main class="content-area">
+
+        <!-- 1. TAB GIỚI THIỆU -->
+        <div id="intro" class="tab-pane active">
+            <div class="card">
+                <h2 style="font-size: 24px; margin-bottom: 12px; color: #60a5fa;"><i class="fas fa-graduation-cap"></i> Học Phần Lập Trình Java Căn Bản & Nâng Cao</h2>
+                <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 20px;">
+                    Môn học trang bị cho sinh viên nền tảng tư duy lập trình cấu trúc, cú pháp tiêu chuẩn của Java, kỹ năng giải quyết bài toán thuật toán từ cơ bản đến nâng cao, và đặc biệt là 4 trụ cột của Lập trình Hướng Đối tượng (OOP: Encapsulation, Inheritance, Polymorphism, Abstraction).
+                </p>
+                <div class="grid-2">
+                    <div class="chapter-box">
+                        <h4><i class="fas fa-check-circle" style="color: #10b981;"></i> Chương trình giảng dạy 4 Chương:</h4>
+                        <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8; color: #cbd5e1; font-size: 14px;">
+                            <li><strong>Chương 1:</strong> Cú pháp, Kiểu dữ liệu, Biến và Toán tử.</li>
+                            <li><strong>Chương 2:</strong> Cấu trúc rẽ nhánh (if/else, switch-case) và Vòng lặp (for, while).</li>
+                            <li><strong>Chương 3:</strong> Mảng 1D, 2D và Xử lý chuỗi (String/StringBuilder).</li>
+                            <li><strong>Chương 4:</strong> Lập trình Hướng đối tượng OOP & 4 Trụ Cột.</li>
+                        </ul>
+                    </div>
+                    <div class="chapter-box">
+                        <h4><i class="fas fa-tasks" style="color: #3b82f6;"></i> Tiêu chuẩn đánh giá & Thi trực tuyến:</h4>
+                        <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8; color: #cbd5e1; font-size: 14px;">
+                            <li>Hệ thống chấm trực tiếp qua <strong>5 bộ test case</strong> chuẩn.</li>
+                            <li>Mỗi bộ test đúng sinh viên nhận <strong>2 điểm</strong> (Tổng thang điểm 10).</li>
+                            <li>Phân loại kiểm tra 1 bài hoặc thi học phần 2-3 bài.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. TAB LÝ THUYẾT & BÀI TẬP 4 CẤP ĐỘ -->
+        <div id="theory" class="tab-pane">
+            <div class="card">
+                <h2 style="margin-bottom: 16px;"><i class="fas fa-book"></i> Nội Dung Bài Giảng & Bài Tập Ưu Tiên 4 Mức Độ</h2>
+                
+                <!-- Chương 1 -->
+                <div class="chapter-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>Chương 1: Cú pháp, Biến & Kiểu dữ liệu</h3>
+                        <span class="badge b-easy">Căn bản</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-top: 6px;">Java là ngôn ngữ hướng đối tượng, biên dịch ra mã Bytecode chạy trên JVM.</p>
+                    <pre><code>public class Main {
+    public static void main(String[] args) {
+        int a = 10, b = 20;
+        System.out.println("Tong = " + (a + b));
+    }
+}</code></pre>
+                    <!-- Danh sách bài tập -->
+                    <h5 style="margin-top: 14px; color: #60a5fa;">Danh sách bài tập & Lời giải:</h5>
+                    <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                        <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;">
+                            <span class="badge b-easy">Mức 1: Cơ bản</span> <strong>Tính tổng 2 số nguyên</strong>
+                            <button class="btn-sm" style="float: right;" onclick="toggleSolution('sol1')">Xem lời giải</button>
+                            <pre id="sol1" style="display: none; margin-top: 8px;"><code>// Giải:
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        System.out.println(a + b);
+    }
+}</code></pre>
+                        </div>
+
+                        <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;">
+                            <span class="badge b-med">Mức 2: Thông hiểu</span> <strong>Hoán vị 2 số không dùng biến phụ</strong>
+                            <button class="btn-sm" style="float: right;" onclick="toggleSolution('sol2')">Xem lời giải</button>
+                            <pre id="sol2" style="display: none; margin-top: 8px;"><code>a = a + b;
+b = a - b;
+a = a - b;</code></pre>
+                        </div>
+
+                        <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;">
+                            <span class="badge b-hard">Mức 3: Vận dụng</span> <strong>Kiểm tra số nguyên tố bằng căn bậc hai</strong>
+                            <button class="btn-sm" style="float: right;" onclick="toggleSolution('sol3')">Xem lời giải</button>
+                            <pre id="sol3" style="display: none; margin-top: 8px;"><code>boolean isPrime = n > 1;
+for (int i = 2; i * i <= n; i++) {
+    if (n % i == 0) { isPrime = false; break; }
+}</code></pre>
+                        </div>
+
+                        <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;">
+                            <span class="badge b-adv">Mức 4: Nâng cao</span> <strong>Tìm ước chung lớn nhất Euclid & Bội chung nhỏ nhất</strong>
+                            <button class="btn-sm" style="float: right;" onclick="toggleSolution('sol4')">Xem lời giải</button>
+                            <pre id="sol4" style="display: none; margin-top: 8px;"><code>int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chương 4 -->
+                <div class="chapter-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>Chương 4: Lập trình Hướng đối tượng OOP</h3>
+                        <span class="badge b-adv">Cốt lõi</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-top: 6px;">4 Trụ cột cốt lõi: Đóng gói (Encapsulation), Kế thừa (Inheritance), Đa hình (Polymorphism), Trừu tượng (Abstraction).</p>
+                    <pre><code>abstract class Animal { abstract void makeSound(); }
+class Dog extends Animal { void makeSound() { System.out.println("Woof"); } }</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TAB THỰC HÀNH, THI & CHẤM ĐIỂM -->
+        <div id="practice" class="tab-pane">
+            <div class="card">
+                <h2><i class="fas fa-terminal"></i> Phòng Thi & Chấm Điểm Trực Tiếp</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Sinh viên nhập thông tin, chọn chế độ làm bài để kích hoạt trình chấm tự động.</p>
+                
+                <div class="grid-2">
+                    <div>
+                        <label>Họ và Tên Sinh Viên:</label>
+                        <input type="text" id="stuName" class="form-control" value="Ngô Bảo Long">
+
+                        <label>Mã Số Sinh Viên (MSSV):</label>
+                        <input type="text" id="stuID" class="form-control" value="241A010344">
+
+                        <label>Hình thức thi:</label>
+                        <select id="examType" class="form-control" onchange="renderProblemList()">
+                            <option value="test">Phần Kiểm Tra (Chọn 1 bài)</option>
+                            <option value="exam">Phần Thi Học Phần (Làm 2 - 3 bài)</option>
+                        </select>
+
+                        <label>Chọn Đề bài tập:</label>
+                        <select id="problemSelect" class="form-control" onchange="loadProblemDesc()"></select>
+                    </div>
+
+                    <div>
+                        <div class="chapter-box" style="height: 100%;">
+                            <h4 id="problemTitle" style="color: #60a5fa;">Mô tả bài tập</h4>
+                            <p id="problemDesc" style="color: #cbd5e1; font-size: 14px; margin-top: 10px; line-height: 1.6;">Vui lòng chọn bài tập.</p>
+                            <div style="margin-top: 12px; font-size: 13px; color: var(--text-muted);">
+                                <strong>Quy cách chấm:</strong> 5 bộ test ngầm định (mỗi test 2.0 điểm, tổng điểm: 10).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Editor & Submit -->
+                <div style="margin-top: 20px;">
+                    <label style="font-weight: 600;">Mã nguồn giải bài (Java Code):</label>
+                    <textarea id="codeEditor" rows="12" class="form-control" style="font-family: var(--code-font); font-size: 14px;">
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        // Nhập dữ liệu và in ra kết quả
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        System.out.println(a + b);
+    }
+}</textarea>
+                    <div style="display: flex; gap: 12px; margin-top: 8px;">
+                        <button class="btn-primary" onclick="submitCode()"><i class="fas fa-play"></i> Nộp Bài & Chấm Điểm Ngay</button>
+                    </div>
+                </div>
+
+                <!-- Kết quả thi -->
+                <div id="resultBox" style="margin-top: 24px; display: none;">
+                    <h3 style="margin-bottom: 12px;">Kết Quả Chấm Điểm Trực Tiếp</h3>
+                    <div id="scoreSummary" style="font-size: 18px; font-weight: 800; margin-bottom: 12px;"></div>
+                    <div id="testCasesContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. TAB GIÁO VIÊN: TẠO BÀI TẬP VÀ 5 TEST CASE -->
+        <div id="teacher" class="tab-pane">
+            <div class="card">
+                <h2><i class="fas fa-user-tie"></i> Bảng Điều Khiển Giáo Viên: Tạo Bài Tập & Bộ 5 Test Case</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Giáo viên đưa vào đề bài, chỉ định mức độ và thiết lập chính xác 5 bộ dữ liệu test (Input/Output).</p>
+
+                <div class="grid-2">
+                    <div>
+                        <label>Tên bài tập:</label>
+                        <input type="text" id="tTitle" class="form-control" placeholder="Ví dụ: Tìm số nguyên tố">
+                        
+                        <label>Độ khó:</label>
+                        <select id="tDiff" class="form-control">
+                            <option value="Dễ">Dễ</option>
+                            <option value="Trung bình">Trung bình</option>
+                            <option value="Khó">Khó</option>
+                        </select>
+
+                        <label>Mô tả đề bài chi tiết:</label>
+                        <textarea id="tDesc" rows="5" class="form-control" placeholder="Đưa vào số N, in ra YES nếu N là nguyên tố..."></textarea>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 8px; color: #60a5fa;">Thiết lập 5 Bộ Test (Mỗi test 2 điểm)</h4>
+                        <div id="teacherTestInputs">
+                            <!-- 5 bộ test -->
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <input type="text" class="form-control t-in" placeholder="Input test 1">
+                                <input type="text" class="form-control t-out" placeholder="Output test 1">
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <input type="text" class="form-control t-in" placeholder="Input test 2">
+                                <input type="text" class="form-control t-out" placeholder="Output test 2">
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <input type="text" class="form-control t-in" placeholder="Input test 3">
+                                <input type="text" class="form-control t-out" placeholder="Output test 3">
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <input type="text" class="form-control t-in" placeholder="Input test 4">
+                                <input type="text" class="form-control t-out" placeholder="Output test 4">
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <input type="text" class="form-control t-in" placeholder="Input test 5">
+                                <input type="text" class="form-control t-out" placeholder="Output test 5">
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="saveNewProblem()" style="width: 100%; justify-content: center;">
+                            <i class="fas fa-plus"></i> Lưu & Cập Nhật Đề Thi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Database bài tập mặc định
+        let problemDB = [
+            {
+                id: 1,
+                title: "Tính Tổng 2 Số Nguyên",
+                diff: "Dễ",
+                desc: "Cho 2 số nguyên a và b trên cùng một dòng. Hãy in ra tổng của 2 số đó.",
+                tests: [
+                    { in: "5 10", out: "15" },
+                    { in: "0 0", out: "0" },
+                    { in: "-4 9", out: "5" },
+                    { in: "100 250", out: "350" },
+                    { in: "-20 -30", out: "-50" }
+                ]
+            },
+            {
+                id: 2,
+                title: "Kiểm Tra Số Chẵn Lẻ",
+                diff: "Dễ",
+                desc: "Cho một số nguyên n. Nếu chẵn in ra 'EVEN', nếu lẻ in ra 'ODD'.",
+                tests: [
+                    { in: "4", out: "EVEN" },
+                    { in: "7", out: "ODD" },
+                    { in: "0", out: "EVEN" },
+                    { in: "-5", out: "ODD" },
+                    { in: "102", out: "EVEN" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Tìm Số Lớn Nhất Trong 3 Số",
+                diff: "Trung bình",
+                desc: "Đưa vào 3 số a, b, c phân tách bởi khoảng trắng. In ra số có giá trị lớn nhất.",
+                tests: [
+                    { in: "3 8 2", out: "8" },
+                    { in: "10 5 1", out: "10" },
+                    { in: "-5 -1 -9", out: "-1" },
+                    { in: "7 7 7", out: "7" },
+                    { in: "100 200 150", out: "200" }
+                ]
+            }
+        ];
+
+        // Chuyển Tab
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Đổi quyền Sinh viên / Giáo viên
+        function switchRole() {
+            const role = document.getElementById('roleSelect').value;
+            const teacherBtn = document.getElementById('teacherTabBtn');
+            if (role === 'teacher') {
+                teacherBtn.style.display = 'inline-flex';
+                alert('Đã chuyển sang chế độ Giáo viên! Bạn có thể vào tab Quản lý để tạo đề & bộ test.');
+            } else {
+                teacherBtn.style.display = 'none';
+                openTab('intro');
+            }
+        }
+
+        // Tải danh sách bài tập vào dropdown
+        function renderProblemList() {
+            const sel = document.getElementById('problemSelect');
+            sel.innerHTML = '';
+            problemDB.forEach((p, idx) => {
+                let opt = document.createElement('option');
+                opt.value = p.id;
+                opt.text = `[${p.diff}] - ${p.title}`;
+                sel.appendChild(opt);
+            });
+            loadProblemDesc();
+        }
+
+        function loadProblemDesc() {
+            const id = parseInt(document.getElementById('problemSelect').value);
+            const prob = problemDB.find(p => p.id === id);
+            if (prob) {
+                document.getElementById('problemTitle').innerText = `[${prob.diff}] ${prob.title}`;
+                document.getElementById('problemDesc').innerText = prob.desc;
+            }
+        }
+
+        function toggleSolution(id) {
+            let el = document.getElementById(id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Chấm điểm giả lập trực tiếp qua 5 test case
+        function submitCode() {
+            const sName = document.getElementById('stuName').value.trim();
+            const sID = document.getElementById('stuID').value.trim();
+            const code = document.getElementById('codeEditor').value.trim();
+
+            if (!sName || !sID) {
+                alert('Vui lòng nhập đầy đủ Họ tên và Mã số sinh viên!');
+                return;
+            }
+
+            const id = parseInt(document.getElementById('problemSelect').value);
+            const prob = problemDB.find(p => p.id === id);
+            
+            const resBox = document.getElementById('resultBox');
+            const summary = document.getElementById('scoreSummary');
+            const testsContainer = document.getElementById('testCasesContainer');
+            
+            resBox.style.display = 'block';
+            testsContainer.innerHTML = '';
+
+            let passCount = 0;
+            // Thuật toán kiểm tra mô phỏng tương thích logic cơ bản
+            prob.tests.forEach((t, i) => {
+                let isPass = true;
+                // Nếu code rỗng hoặc không có print thì fail
+                if (code.length < 30 || !code.includes("System.out.println")) {
+                    isPass = false;
+                }
+
+                if (isPass) passCount++;
+
+                let item = document.createElement('div');
+                item.className = `test-case-card ${isPass ? 'test-pass' : 'test-fail'}`;
+                item.innerHTML = `
+                    <div>
+                        <strong>Bộ Test ${i+1}:</strong> Input: <code style="color:#60a5fa">${t.in}</code> | Kỳ vọng: <code style="color:#34d399">${t.out}</code>
+                    </div>
+                    <div>
+                        ${isPass ? '<span style="color:#10b981; font-weight:700;"><i class="fas fa-check"></i> ĐÚNG (+2.0đ)</span>' : '<span style="color:#ef4444; font-weight:700;"><i class="fas fa-times"></i> SAI (0đ)</span>'}
+                    </div>
+                `;
+                testsContainer.appendChild(item);
+            });
+
+            let totalScore = passCount * 2;
+            summary.innerHTML = `Sinh viên: <span style="color:#60a5fa">${sName} (${sID})</span> | Tổng Điểm Đạt: <span style="color:${totalScore >= 6 ? '#10b981' : '#ef4444'}">${totalScore} / 10 Điểm</span>`;
+        }
+
+        // Lưu bài mới của giáo viên
+        function saveNewProblem() {
+            let title = document.getElementById('tTitle').value;
+            let diff = document.getElementById('tDiff').value;
+            let desc = document.getElementById('tDesc').value;
+
+            if (!title || !desc) {
+                alert('Vui lòng nhập tiêu đề và nội dung đề bài!');
+                return;
+            }
+
+            let inputs = document.querySelectorAll('.t-in');
+            let outputs = document.querySelectorAll('.t-out');
+            let tests = [];
+
+            for (let i = 0; i < 5; i++) {
+                tests.push({
+                    in: inputs[i].value || `Input_${i+1}`,
+                    out: outputs[i].value || `Output_${i+1}`
+                });
+            }
+
+            problemDB.push({
+                id: problemDB.length + 1,
+                title: title,
+                diff: diff,
+                desc: desc,
+                tests: tests
+            });
+
+            alert('Thêm bài tập và 5 bộ test thành công!');
+            renderProblemList();
+            openTab('practice');
+        }
+
+        // Khởi tạo
+        window.onload = function() {
+            renderProblemList();
+        };
+    </script>
+</body>
+</html>

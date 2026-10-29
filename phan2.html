@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ - Thông Tin Sinh Viên</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --card-bg: rgba(23, 32, 54, 0.7);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.35);
+            --secondary: #06b6d4;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: rgba(148, 163, 184, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.12) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: var(--text-main);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(16px);
+            border-radius: 28px;
+            padding: 48px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px var(--primary-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4, #10b981);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            margin-bottom: 36px;
+            padding-bottom: 36px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .container {
+                padding: 24px;
+            }
+        }
+
+        .avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .avatar-img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #1e293b;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            display: block;
+        }
+
+        .badge-status {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 2px solid var(--bg-dark);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .profile-info h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .role-tag {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .info-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            padding: 18px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .info-card.green .info-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .info-card.cyan .info-icon {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .info-val {
+            font-size: 15px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-top: 2px;
+        }
+
+        .action-banner {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .action-banner h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .action-banner p {
+            color: var(--text-sub);
+            font-size: 14px;
+            max-width: 600px;
+        }
+
+        /* Nút chuyển sang file index.html */
+        .btn-portal {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #2563eb, #0284c7);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 15px 34px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+            transition: all 0.25s ease;
+        }
+
+        .btn-portal:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.7);
+            background: linear-gradient(135deg, #1d4ed8, #0369a1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-wrap">
+                <img src="long.jpg" alt="Avatar" class="avatar-img">
+                <span class="badge-status"><i class="fas fa-circle" style="font-size: 8px;"></i> Online</span>
+            </div>
+            <div class="profile-info">
+                <span class="role-tag"><i class="fas fa-code"></i> Sinh viên phát triển phần mềm</span>
+                <h1>Ngô Bảo Long</h1>
+                <p style="color: var(--text-sub); line-height: 1.6; font-size: 15px;">
+                     Nhấp vào nút bên dưới để chuyển tiếp sang hệ thống học tập, làm bài tập và thi trực tuyến.
+                </p>
+            </div>
+        </div>
+
+        <!-- Thông tin chi tiết -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-icon"><i class="fas fa-id-card"></i></div>
+                <div>
+                    <div class="info-label">Mã Số Sinh Viên</div>
+                    <div class="info-val">241A010344</div>
+                </div>
+            </div>
+            <div class="info-card green">
+                <div class="info-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div>
+                    <div class="info-label">Trường Đào Tạo</div>
+                    <div class="info-val">Đại học Văn Hiến</div>
+                </div>
+            </div>
+            <div class="info-card cyan">
+                <div class="info-icon"><i class="fas fa-laptop-code"></i></div>
+                <div>
+                    <div class="info-label">Học Phần</div>
+                    <div class="info-val">Lập Trình Java Căn Bản & OOP</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cụm chuyển sang Phần 1 -->
+        <div class="action-banner">
+            <h3>Nền Tảng Hỗ Trợ Dạy Học & Thi Lập Trình Java</h3>
+            <p>Hệ thống bao gồm đầy đủ bài giảng lý thuyết 4 chương, bài tập 4 cấp độ kèm lời giải mẫu, phân quyền Giáo viên - Sinh viên và công cụ thi trực tiếp với 5 test case tự động.</p>
+            <!-- Thẻ liên kết mở file index.html -->
+            <a href="index.html" class="btn-portal">
+                <span>Vào Trang Học & Thi (Phần 1)</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
